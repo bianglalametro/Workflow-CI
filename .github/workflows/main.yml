@@ -13,11 +13,6 @@ jobs:
     environment: sml
 
     steps:
-      - name: Debug Docker Hub Username
-        run: |
-          echo "Docker Hub Username: ${{ secrets.DOCKER_HUB_USERNAME }}"
-          echo "Docker Hub Access Token: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}"
-
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -37,8 +32,8 @@ jobs:
 
       - name: Get latest MLflow run_id
         run: |
-          # Find the latest experiment directory
-          LATEST_EXPERIMENT=$(ls -td MLProject/mlruns/*/ | head -n 1 | xargs basename)
+          # Find the latest experiment directory (exclude models subdirectory)
+          LATEST_EXPERIMENT=$(ls -td MLProject/mlruns/*/  | grep -v '/models/' | head -n 1 | xargs basename)
           if [ -z "$LATEST_EXPERIMENT" ]; then
             echo "No experiment directories found. Exiting."
             exit 1
@@ -46,9 +41,15 @@ jobs:
 
           # Find the latest run ID in the latest experiment
           LATEST_EXPERIMENT_PATH="MLProject/mlruns/$LATEST_EXPERIMENT"
-          RUN_ID=$(ls -td "$LATEST_EXPERIMENT_PATH"/*/ | grep -Eo '[0-9a-f]{32}' | head -n 1)
+          RUN_ID=$(ls -td "$LATEST_EXPERIMENT_PATH"/[0-9a-f]* 2>/dev/null | head -n 1 | xargs basename)
           if [ -z "$RUN_ID" ]; then
             echo "No valid Run ID found in experiment $LATEST_EXPERIMENT. Exiting."
+            exit 1
+          fi
+
+          # Verify model artifact exists
+          if [ ! -d "$LATEST_EXPERIMENT_PATH/$RUN_ID/artifacts/model" ]; then
+            echo "Model artifact not found at $LATEST_EXPERIMENT_PATH/$RUN_ID/artifacts/model. Exiting."
             exit 1
           fi
 
@@ -60,7 +61,7 @@ jobs:
       - name: Build Docker Model
         run: |
           export MLFLOW_TRACKING_URI="file://$(pwd)/MLProject/mlruns"
-          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "insurance_model"
+          mlflow models build-docker --model-uri "runs:/${{ env.RUN_ID }}/model" --name "insurance_model"
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
