@@ -13,11 +13,13 @@ mlflow.set_tracking_uri(mlruns_path)
 experiment_name = "1"
 mlflow.set_experiment(experiment_name)
 
-data_path = "./insurance_preprocessing/insurance_clean.csv"
+base_dir = pathlib.Path(__file__).parent.absolute()
+data_path = base_dir / "insurance_preprocessing/insurance_clean.csv"
 
-if not os.path.exists(data_path):
+if not data_path.exists():
+    # Create a dummy dataset if it doesn't exist
     print("Dataset file not found. Creating a dummy dataset...")
-    os.makedirs(os.path.dirname(data_path), exist_ok=True)
+    data_path.parent.mkdir(parents=True, exist_ok=True)
     dummy_data = {
         "age": [25, 30, 35, 40],
         "sex": ["male", "female", "male", "female"],
@@ -54,3 +56,8 @@ with mlflow.start_run(run_name="Basic_RandomForest") as run:
 
     print(f"Model logged under run ID: {run.info.run_id}")
     print("Basic Model Training Completed.")
+    
+import os
+print(f"Current working directory: {os.getcwd()}")
+print(f"Data path (absolute): {os.path.abspath(data_path)}")
+print(f"Data path exists: {os.path.exists(data_path)}")
