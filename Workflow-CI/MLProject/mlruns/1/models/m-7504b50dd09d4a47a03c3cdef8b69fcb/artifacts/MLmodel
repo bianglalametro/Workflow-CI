@@ -1,0 +1,22 @@
+artifact_path: file:E:/Codebases/altaf_cuki/criteria_2/Membangun_model/mlruns/1/models/m-7504b50dd09d4a47a03c3cdef8b69fcb/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.10
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.8.0
+mlflow_version: 3.8.0
+model_id: m-7504b50dd09d4a47a03c3cdef8b69fcb
+model_size_bytes: 9655997
+model_uuid: m-7504b50dd09d4a47a03c3cdef8b69fcb
+prompts: null
+run_id: 2df5c105c47744eca1e98970df992e2c
+utc_time_created: '2025-12-23 15:17:40.359129'
