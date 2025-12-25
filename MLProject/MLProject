@@ -1,5 +1,7 @@
-name: Insurance_Cost_Prediction
+name: ci-mlflow-project
+ 
 conda_env: conda.yaml
+ 
 entry_points:
   main:
     command: "python modelling.py"
