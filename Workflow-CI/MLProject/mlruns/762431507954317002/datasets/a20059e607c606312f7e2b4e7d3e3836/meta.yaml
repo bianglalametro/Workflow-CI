@@ -1,0 +1,12 @@
+digest: ed9f851b
+name: dataset
+profile: '{"num_rows": 1062, "num_elements": 8496}'
+schema: '{"mlflow_colspec": [{"type": "double", "name": "age", "required": true},
+  {"type": "long", "name": "sex", "required": true}, {"type": "double", "name": "bmi",
+  "required": true}, {"type": "double", "name": "children", "required": true}, {"type":
+  "long", "name": "smoker", "required": true}, {"type": "boolean", "name": "loc_northwest",
+  "required": true}, {"type": "boolean", "name": "loc_southeast", "required": true},
+  {"type": "boolean", "name": "loc_southwest", "required": true}]}'
+source: '{"tags": {"mlflow.user": "runner", "mlflow.source.name": "criteria_3/Workflow-CI/MLProject/modelling.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "031530e9db1154a2a4df565038ec7a67e2db93c9"}}'
+source_type: code
