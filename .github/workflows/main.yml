@@ -76,10 +76,13 @@ jobs:
 
       - name: Build Docker Model
         run: |
-          export MLFLOW_TRACKING_URI="file://$(pwd)/criteria_3/Workflow-CI/MLProject/mlruns"
-          MODEL_URI="file://$(pwd)/criteria_3/Workflow-CI/MLProject/mlruns/$EXPERIMENT_ID/models/$MODEL_DIR/artifacts"
+          cd criteria_3/Workflow-CI/MLProject
+          export MLFLOW_TRACKING_URI="file://$(pwd)/mlruns"
+          MODEL_URI="runs:/${RUN_ID}/model"
           echo "Using model URI: $MODEL_URI"
+          echo "Tracking URI: $MLFLOW_TRACKING_URI"
           mlflow models build-docker --model-uri "$MODEL_URI" --name "insurance_model"
+          
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
