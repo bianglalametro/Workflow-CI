@@ -34,7 +34,7 @@ jobs:
       - name: Run MLflow project
         run: |
           cd criteria_3/Workflow-CI/MLProject
-          mlflow run . --no-conda
+          mlflow run .
 
       - name: Get latest MLflow run_id and model directory
         run: |
