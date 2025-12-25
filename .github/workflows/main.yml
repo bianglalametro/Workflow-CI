@@ -75,28 +75,10 @@ jobs:
 
       - name: Build Docker Model
         run: |
-          cd criteria_3/Workflow-CI/MLProject
-          export MLFLOW_TRACKING_URI="file://$(pwd)/mlruns"
-          
-          # Debug: Show what we have
-          echo "RUN_ID: $RUN_ID"
-          echo "EXPERIMENT_ID: $EXPERIMENT_ID"
-          echo "Tracking URI: $MLFLOW_TRACKING_URI"
-          
-          # List the run directory to see what's there
-          ls -la "mlruns/$EXPERIMENT_ID/$RUN_ID/" || echo "Run directory not found"
-          ls -la "mlruns/$EXPERIMENT_ID/$RUN_ID/artifacts/" || echo "Artifacts directory not found"
-          
-          # Use the file path directly instead of runs:/ URI
-          MODEL_PATH="mlruns/$EXPERIMENT_ID/$RUN_ID/artifacts/model"
-          echo "Model path:  $MODEL_PATH"
-          
-          if [ -d "$MODEL_PATH" ]; then
-            mlflow models build-docker --model-uri "file://$(pwd)/$MODEL_PATH" --name "insurance_model"
-          else
-            echo "Model directory not found at $MODEL_PATH"
-            exit 1
-          fi
+          export MLFLOW_TRACKING_URI="file://$(pwd)/criteria_3/Workflow-CI/MLProject/mlruns"
+          MODEL_URI="file://$(pwd)/criteria_3/Workflow-CI/MLProject/mlruns/$EXPERIMENT_ID/models/$MODEL_DIR/artifacts"
+          echo "Using model URI: $MODEL_URI"
+          mlflow models build-docker --model-uri "$MODEL_URI" --name "insurance_model"
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
