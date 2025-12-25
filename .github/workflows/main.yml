@@ -35,16 +35,21 @@ jobs:
         run: |
           python criteria_3/Workflow-CI/MLProject/modelling.py
 
+      - name: Debug MLruns Directory Structure
+        run: |
+          echo "Current Directory:"
+          pwd
+          echo "Contents of criteria_3/Workflow-CI/MLProject:"
+          ls -R criteria_3/Workflow-CI/MLProject
+
       - name: Get latest MLflow run_id
         run: |
-          # Find the latest experiment directory
           LATEST_EXPERIMENT=$(ls -td criteria_3/Workflow-CI/MLProject/mlruns/*/ | head -n 1 | xargs basename)
           if [ -z "$LATEST_EXPERIMENT" ]; then
             echo "No experiment directories found. Exiting."
             exit 1
           fi
 
-          # Find the latest run ID in the latest experiment
           LATEST_EXPERIMENT_PATH="criteria_3/Workflow-CI/MLProject/mlruns/$LATEST_EXPERIMENT"
           RUN_ID=$(ls -td "$LATEST_EXPERIMENT_PATH"/*/ | grep -Eo '[0-9a-f]{32}' | head -n 1)
           if [ -z "$RUN_ID" ]; then
@@ -56,10 +61,11 @@ jobs:
           echo "EXPERIMENT_ID=$LATEST_EXPERIMENT" >> $GITHUB_ENV
           echo "Latest experiment ID: $LATEST_EXPERIMENT"
           echo "Latest run ID: $RUN_ID"
+          ls -R "$LATEST_EXPERIMENT_PATH"
 
       - name: Build Docker Model
         run: |
-          export MLFLOW_TRACKING_URI="file://$(pwd)/MLProject/mlruns"
+          export MLFLOW_TRACKING_URI="file://$(pwd)/criteria_3/Workflow-CI/MLProject/mlruns"
           mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "insurance_model"
 
       - name: Log in to Docker Hub
