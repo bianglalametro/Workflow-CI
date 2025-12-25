@@ -1,0 +1,14 @@
+artifact_uri: file:///home/runner/work/SML/SML/criteria_3/Workflow-CI/MLProject/mlruns/762431507954317002/7309a68f705348f5840bfa356555d56e/artifacts
+end_time: 1766570736233
+entry_point_name: ''
+experiment_id: '762431507954317002'
+lifecycle_stage: active
+run_id: 7309a68f705348f5840bfa356555d56e
+run_name: Basic_RandomForest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766570731313
+status: 3
+tags: []
+user_id: runner
